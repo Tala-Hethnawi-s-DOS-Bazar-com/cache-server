@@ -4,6 +4,7 @@ from catalog_service import CatalogService
 from order_service import OrderService
 
 app = Flask(__name__)
+cache.init_app(app)
 
 
 @app.route('/cache/<book_id>', methods=["DELETE"])
@@ -21,6 +22,7 @@ def purchase(book_id):
         return jsonify(OrderService().purchase(book_id=book_id))
     except Exception:
         return jsonify({"error": "Sorry!, we were unable to process your order"}), 500
+
 
 @app.route('/search/<topic>', methods=["GET"])
 @cache.cached(key_prefix="%s")
@@ -44,6 +46,7 @@ def info(book_id):
 @app.route('/update/<book_id>', methods=["PUT"])
 def update(book_id):
     # get the book with the requested id
+    print("update_api/{quantity}".format(quantity=request.json["quantity"]))
     request_body = request.json
     try:
         return jsonify(CatalogService().updateBookQuantity(book_id=book_id, quantity=request_body["quantity"]))
@@ -53,6 +56,3 @@ def update(book_id):
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
-    cache.init_app(app)
-    cache.set("catalog_server", 0)
-    cache.set("order_server", 0)

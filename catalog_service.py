@@ -38,6 +38,8 @@ class CatalogService:
 
     def get_url(self):
         current_server = cache.get("catalog_server")
+        if current_server is None:
+            current_server = 0
         idx = current_server % 2
         cache.set("catalog_server", current_server + 1)
         return self.__CATALOG_SERVER_URLS[idx]
