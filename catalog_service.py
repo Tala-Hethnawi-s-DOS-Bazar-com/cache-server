@@ -19,15 +19,10 @@ class CatalogService:
 
     def updateBookQuantity(self, book_id, quantity):
         # update quantity on catalog MS
-        url_1 = self.__CATALOG_SERVER_URLS[0] + self.__UPDATE_QUANTITY_ENDPOINT.format(book_id=book_id)
-        response = requests.put(url=url_1, json={"quantity": quantity})
+        url = self.get_url() + self.__UPDATE_QUANTITY_ENDPOINT.format(book_id=book_id)
+        response = requests.put(url=url, json={"quantity": quantity})
         if response.status_code >= 400:
             raise Exception("Failed to update book.")
-        url_2 = self.__CATALOG_SERVER_URLS[1] + self.__UPDATE_QUANTITY_ENDPOINT.format(book_id=book_id)
-        response = requests.put(url=url_2, json={"quantity": quantity})
-        if response.status_code >= 400:
-            raise Exception("Failed to update book.")
-
 
     def searchBooks(self, topic):
         url = self.get_url() + self.__SEARCH_ENDPOINT.format(topic=topic)
